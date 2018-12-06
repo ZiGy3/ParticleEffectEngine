@@ -10,5 +10,7 @@ public class Emitter {
 			particles[i] = new Particle(rnd.nextFloat(), rnd.nextFloat(), rnd.nextFloat(), rnd.nextFloat());
 			System.out.println(particles[i]);
 		}
+		Thread t = new Thread(new Graphics());
+		t.start();
 	}
 }
