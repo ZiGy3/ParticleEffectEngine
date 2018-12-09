@@ -29,5 +29,6 @@ public class Graphics extends Application implements Runnable {
 		root.getChildren().add(btn);
 		stage.setScene(new Scene(root, 800, 600));
 		stage.show();
+
 	}
 }
