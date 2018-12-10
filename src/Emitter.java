@@ -7,7 +7,7 @@ public class Emitter {
 	public static void main(String[] args) {
 		Random rnd = new Random();
 		for (int i = 0; i < pNum; i++) {
-			particles[i] = new Particle(rnd.nextFloat(), rnd.nextFloat(), rnd.nextFloat(), rnd.nextFloat());
+			//particles[i] = new Particle(rnd.nextFloat(), rnd.nextFloat(), rnd.nextFloat(), rnd.nextFloat());
 			System.out.println(particles[i]);
 		}
 		Thread t = new Thread(new Graphics());

@@ -7,6 +7,8 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class Graphics extends Application implements Runnable {
+	public static int width = 800;
+	public static int height = 600;
 
 	@Override
 	public void run() {
@@ -27,7 +29,7 @@ public class Graphics extends Application implements Runnable {
 
 		StackPane root = new StackPane();
 		root.getChildren().add(btn);
-		stage.setScene(new Scene(root, 800, 600));
+		stage.setScene(new Scene(root, width, height));
 		stage.show();
 
 	}
