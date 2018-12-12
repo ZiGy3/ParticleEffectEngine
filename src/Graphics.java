@@ -1,12 +1,8 @@
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.util.ArrayList;
 
@@ -17,7 +13,7 @@ public class Graphics extends Application {
 	public static ArrayList<Particle> particles = new ArrayList<>();
 
 	@Override
-	public void start(Stage stage) throws Exception {
+	public void start(Stage stage) {
 		Pane root = new Pane();
 		for (Particle particle:
 			 particles) {
@@ -28,20 +24,20 @@ public class Graphics extends Application {
 
 		stage.setTitle("Particle Effect Engine");
 		stage.setScene(scene);
+		stage.setResizable(false);
 		stage.show();
 
-		Timeline timeline = new Timeline(new KeyFrame(Duration.millis(16),
-				new EventHandler<ActionEvent>() {
-					@Override
-					public void handle(ActionEvent event) {
-						for (Particle particle:
-							 particles) {
-							particle.update();
-						}
-					}
-				}));
-		timeline.setCycleCount(Timeline.INDEFINITE);
-		timeline.play();
+		AnimationTimer timer = new AnimationTimer() {
+			@Override
+			public void handle(long now) {
+				for (Particle particle:
+						particles) {
+					particle.update();
+				}
+			}
+		};
+		timer.start();
+
 	}
 
 	public static void main(String[] args) {
