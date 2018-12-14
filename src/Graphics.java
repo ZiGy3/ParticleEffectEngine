@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Graphics extends Application {
 	public static int width = 800;
 	public static int height = 600;
-	public static int NParticles = 100;
+	public static int NParticles = 1;
 	public static ArrayList<Particle> particles = new ArrayList<>();
 
 	@Override
@@ -24,20 +24,34 @@ public class Graphics extends Application {
 
 		stage.setTitle("Particle Effect Engine");
 		stage.setScene(scene);
-		stage.setResizable(false);
 		stage.show();
 
+		stage.maxWidthProperty().addListener((obs, oldVal, newVal) -> {
+			this.width = newVal.intValue();
+		});
+		stage.maxHeightProperty().addListener((obs, oldVal, newVal) -> {
+			this.height = newVal.intValue();
+		});
+
+
 		AnimationTimer timer = new AnimationTimer() {
+
+			private long lastUpdate = 0;
 			@Override
 			public void handle(long now) {
-				for (Particle particle:
-						particles) {
-					particle.update();
+				if (now - lastUpdate >= 16_000_000) {
+					for (Particle particle:
+							particles) {
+						particle.checkBounce();
+						particle.update();
+						System.out.println(particle.direction);
+					}
+					lastUpdate = now;
 				}
 			}
 		};
-		timer.start();
 
+		timer.start();
 	}
 
 	public static void main(String[] args) {
