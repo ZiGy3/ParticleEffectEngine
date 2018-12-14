@@ -1,3 +1,4 @@
+import com.sun.javafx.perf.PerformanceTracker;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -9,8 +10,9 @@ import java.util.ArrayList;
 public class Graphics extends Application {
 	public static int width = 800;
 	public static int height = 600;
-	public static int NParticles = 1;
+	public static int NParticles = 10;
 	public static ArrayList<Particle> particles = new ArrayList<>();
+	private static PerformanceTracker tracker;
 
 	@Override
 	public void start(Stage stage) {
@@ -36,17 +38,17 @@ public class Graphics extends Application {
 
 		AnimationTimer timer = new AnimationTimer() {
 
-			private long lastUpdate = 0;
+			//private long lastUpdate = 0;
 			@Override
 			public void handle(long now) {
-				if (now - lastUpdate >= 16_000_000) {
+				//if (now - lastUpdate >= 16_000_000) {
+				if (true) {
 					for (Particle particle:
 							particles) {
 						particle.checkBounce();
 						particle.update();
-						System.out.println(particle.direction);
 					}
-					lastUpdate = now;
+					//lastUpdate = now;
 				}
 			}
 		};

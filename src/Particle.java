@@ -9,16 +9,22 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Particle extends Circle {
 	Vec2d direction;
-	int speed;
+	long speed;
 	int size = 4;
+	double subX = 0;
+	double subY = 0;
+	boolean alwaysMoveX = false;
+	boolean alwaysMoveY = false;
 
 	public Particle() {
+		this.setFill(Color.BLACK);
+		this.setRadius(size);
 		ThreadLocalRandom rnd = ThreadLocalRandom.current();
 		this.setCenterX(rnd.nextInt(Graphics.width));
 		this.setCenterY(rnd.nextInt(Graphics.height));
-		this.setRadius(size);
-		float d = rnd.nextFloat();
-		this.direction = new Vec2d(d, 1 - d);
+		double d = rnd.nextDouble();
+		this.speed = rnd.nextLong(1, 6);
+		this.direction = new Vec2d(d * speed, (1 - d) * speed);
 		int sign = rnd.nextInt(-1, 2);
 		while (sign == 0) {
 			sign = rnd.nextInt(-1, 2);
@@ -28,17 +34,43 @@ public class Particle extends Circle {
 			sign = rnd.nextInt(-1, 2);
 		} while (sign == 0);
 		direction.y *= sign;
-//		while (direction.x == 0 || direction.y == 0) {
-//			direction.set(rnd.nextInt(-5, 6), rnd.nextInt(-5, 6));
-//		}
-//		this.speed = rnd.nextInt(1, 6);
-		this.speed = 1;
-		this.setFill(Color.BLACK);
+		if (direction.x >= 1 || direction.x <= -1) {
+			alwaysMoveX = true;
+		}
+		if (direction.y >= 1 || direction.y <= -1) {
+			alwaysMoveY = true;
+		}
 	}
 
 	public void update() {
-		this.setCenterX((int) this.getCenterX() + (direction.x * speed));
-		this.setCenterY((int) this.getCenterY() + (direction.y * speed));
+		if (!alwaysMoveX) {
+			subX += direction.x;
+			if (subX > 1 || subX < -1) {
+				if (direction.x > 0) {
+					this.setCenterX(this.getCenterX() + 1);
+					subX -= 1;
+				} else {
+					this.setCenterX(this.getCenterX() - 1);
+					subX += 1;
+				}
+			}
+		} else {
+			this.setCenterX((int) this.getCenterX() + (int) direction.x);
+		}
+		if (!alwaysMoveY) {
+			subY += direction.y;
+			if (subY > 1 || subY < -1) {
+				if (direction.y > 0) {
+					this.setCenterY(this.getCenterY() + 1);
+					subY -= 1;
+				} else {
+					this.setCenterY(this.getCenterY() - 1);
+					subY += 1;
+				}
+			}
+		} else {
+			this.setCenterY((int) this.getCenterY() + (int) direction.y);
+		}
 	}
 
 	public void checkBounce() {
