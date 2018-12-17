@@ -1,4 +1,3 @@
-import com.sun.javafx.perf.PerformanceTracker;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -7,12 +6,17 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
+//FIXME to-do list
+// - fix particles going over the edge after resizing window
+// - fix frame rate going over 60 on ubuntu
+// - add collisions
+// - add gravity
+
 public class Graphics extends Application {
 	public static int width = 800;
 	public static int height = 600;
 	public static int NParticles = 10;
 	public static ArrayList<Particle> particles = new ArrayList<>();
-	private static PerformanceTracker tracker;
 
 	@Override
 	public void start(Stage stage) {
@@ -28,27 +32,22 @@ public class Graphics extends Application {
 		stage.setScene(scene);
 		stage.show();
 
-		stage.maxWidthProperty().addListener((obs, oldVal, newVal) -> {
-			this.width = newVal.intValue();
-		});
-		stage.maxHeightProperty().addListener((obs, oldVal, newVal) -> {
-			this.height = newVal.intValue();
-		});
+		stage.widthProperty().addListener((obs, oldVal, newVal) -> width = newVal.intValue());
+		stage.heightProperty().addListener((obs, oldVal, newVal) -> height = newVal.intValue());
 
 
 		AnimationTimer timer = new AnimationTimer() {
 
-			//private long lastUpdate = 0;
+			private long lastUpdate = 0;
 			@Override
 			public void handle(long now) {
-				//if (now - lastUpdate >= 16_000_000) {
-				if (true) {
-					for (Particle particle:
+				if (now - lastUpdate >= 0) {
+					for (Particle particle :
 							particles) {
 						particle.checkBounce();
 						particle.update();
 					}
-					//lastUpdate = now;
+					lastUpdate = now;
 				}
 			}
 		};
