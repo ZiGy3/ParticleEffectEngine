@@ -15,6 +15,7 @@ public class Particle extends Circle {
 	double subY = 0;
 	boolean alwaysMoveX = false;
 	boolean alwaysMoveY = false;
+	double gravity = 1;
 
 	public Particle() {
 		this.setFill(Color.BLACK);
@@ -43,6 +44,7 @@ public class Particle extends Circle {
 	}
 
 	public void update() {
+		this.direction.y += gravity;
 		if (!alwaysMoveX) {
 			subX += direction.x;
 			if (subX > 1 || subX < -1) {
@@ -73,6 +75,7 @@ public class Particle extends Circle {
 		}
 	}
 
+
 	public void checkBounce() {
 		if ((this.getCenterX() - this.getRadius() <= 0 && this.direction.x < 0)
 					|| (this.getCenterX() + this.getRadius() >= Graphics.width && this.direction.x > 0)) {
@@ -80,7 +83,7 @@ public class Particle extends Circle {
 		}
 		if ((this.getCenterY() - this.getRadius() <= 0 && this.direction.y < 0)
 					|| (this.getCenterY() + this.getRadius() >= Graphics.height && this.direction.y > 0)) {
-			this.direction.y *= -1;
+			this.direction.y *= -0.85;
 		}
 	}
 }
