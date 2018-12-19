@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.util.ArrayList;
 
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 public class Graphics extends Application {
 	public static int width = 800;
 	public static int height = 600;
-	public static int NParticles = 10;
+	public static int NParticles = 100;
 	public static ArrayList<Particle> particles = new ArrayList<>();
 	private static PerformanceTracker tracker;
 
@@ -32,10 +33,15 @@ public class Graphics extends Application {
 
 		stage.setTitle("Particle Effect Engine");
 		stage.setScene(scene);
+		//stage.initStyle(StageStyle.TRANSPARENT);
 		stage.show();
 
-		stage.widthProperty().addListener((obs, oldVal, newVal) -> width = newVal.intValue());
-		stage.heightProperty().addListener((obs, oldVal, newVal) -> height = newVal.intValue());
+		stage.widthProperty().addListener((obs, oldVal, newVal) -> {
+			width = newVal.intValue();
+		});
+		stage.heightProperty().addListener((obs, oldVal, newVal) -> {
+			height = newVal.intValue();
+		});
 
 
 		tracker = PerformanceTracker.getSceneTracker(scene);
@@ -44,14 +50,18 @@ public class Graphics extends Application {
 			private long lastUpdate = 0;
 			@Override
 			public void handle(long now) {
-				//if (now - lastUpdate >= 16_000_000) {
-				if (true) {
+				if (now - lastUpdate >= 16_000_000) {
 					for (Particle particle:
 							particles) {
 						particle.checkBounce();
 						particle.update();
+						for (Particle particle2:
+							 particles) {
+							if(particle.isColliding(particle2)) particle.collide(particle2);
+						}
 						//particle.gravity();
 						//System.out.println(particle.direction.y);
+						//System.out.println(particle.getCenterX() + ", " + particle.getCenterY());
 					}
 					lastUpdate = now;
 				}
