@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class Graphics extends Application {
 	public static int width = 800;
 	public static int height = 600;
-	public static int NParticles = 100;
+	public static int NParticles = 1000;
 	public static ArrayList<Particle> particles = new ArrayList<>();
 	private static PerformanceTracker tracker;
 

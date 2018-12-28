@@ -4,6 +4,8 @@ import javafx.scene.shape.Circle;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import static java.lang.Math.sqrt;
+
 public class Particle extends Circle {
 	Vec2d direction;
 	long speed;
@@ -88,6 +90,7 @@ public class Particle extends Circle {
 	}
 
 	public boolean isColliding(Particle particle) {
+		if(this == particle) return false;
 		double xD = this.getCenterX() - particle.getCenterX();
 		double yD = this.getCenterY() - particle.getCenterY();
 
@@ -102,34 +105,28 @@ public class Particle extends Circle {
 	}
 
 	public void collide(Particle particle) {
-		if (this == particle) return;
+		double deltaX = particle.getCenterX() - this.getCenterX();
+		double deltaY = particle.getCenterY() - this.getCenterY();
 
-		Vec2d delta = new Vec2d(this.getCenterX() - particle.getCenterX(), this.getCenterY() - particle.getCenterY());
-		double d = Math.sqrt(delta.x * delta.x + delta.y * delta.y);
-		Vec2d mtd = new Vec2d(delta.x * (((this.size + particle.size) - d) / d), delta.y * (((this.size + particle.size) - d) / d));
+		double distance = sqrt(deltaX * deltaX + deltaY * deltaY);
+		double unitContactX = deltaX / distance;
+		double unitContactY = deltaY / distance;
 
-		double im1 = 1 / size;
-		double im2 = 1 / particle.size;
+		double u1 = this.direction.x * unitContactX + this.direction.y * unitContactY;
+		double u2 = particle.direction.x * unitContactX + particle.direction.y * unitContactY;
 
-		this.setCenterX(this.getCenterX() + (int) (mtd.x * (im1 / (im1 + im2))) + 1);
-		this.setCenterY(this.getCenterY() + (int) (mtd.y * (im1 / (im1 + im2))) + 1);
+		double massSum = this.size + particle.size;
+		double massDiff = this.size - particle.size;
 
-		particle.setCenterX(particle.getCenterX() - (int) (mtd.x * (im2 / (im1 + im2))) - 1);
-		particle.setCenterY(particle.getCenterY() - (int) (mtd.y * (im2 / (im1 + im2))) - 1);
+		double v1 = (2 * particle.size * u2 + u1 * massDiff) / massSum;
+		double v2 = (2 * this.size * u1 - u2 * massDiff) / massSum;
 
-		Vec2d v = new Vec2d(this.direction.x - particle.direction.x, this.direction.y - particle.direction.y);
-		Vec2d nmtd = new Vec2d(mtd.x / (mtd.x + mtd.y), mtd.y / (mtd.x + mtd.y));
-		double vn = (v.x * nmtd.x) + (v.y * nmtd.y);
+		double u1PerpX = this.direction.x - u1 * unitContactX;
+		double u1PerpY = this.direction.y - u1 * unitContactX;
+		double u2PerpX = particle.direction.x - u2 * unitContactX;
+		double u2PerpY = particle.direction.y - u2 * unitContactY;
 
-		if(vn > 0.0d) return;
-
-		double i = (-(1.0d + 0.8d) * vn) / (im1 + im2);
-		Vec2d impulse = new Vec2d(mtd.x * i, mtd.y * i);
-
-		this.direction.x += impulse.x * im1;
-		this.direction.y += impulse.y * im1;
-
-		particle.direction.x -= impulse.x * im2;
-		particle.direction.y -= impulse.y * im2;
+		this.direction.set(v1 * unitContactX + u1PerpX, v1 * unitContactY + u1PerpY);
+		particle.direction.set(v2 * unitContactX + u2PerpX, v2 * unitContactY + u2PerpY);
 	}
 }
