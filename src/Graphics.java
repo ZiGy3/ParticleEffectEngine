@@ -9,10 +9,13 @@ import javafx.stage.StageStyle;
 import java.util.ArrayList;
 
 //FIXME to-do list
-// - fix particles going over the edge after resizing window
-// - fix frame rate going over 60 on ubuntu
-// - add collisions
-// - add gravity
+// - FIX PARTICLES GOING OVER THE EDGE AFTER RESIZING WINDOW!!! (can be done with "StageStyle.TRANSPARENT" but I need resizing!
+// - DONE fix frame rate going over 60 on ubuntu
+// - DONE (MAYBE) add collisions
+// - DONE add gravity
+// - add emitter (also add "time to live" to particle, move spawinng of particles to emitter, maybe keep random spawning
+//   of particles as a feature, add different types of emitters (maybe each in its own class), figure out who will spawn
+//   emitters etc etc. Basically a lot of work to be done on emitters
 
 public class Graphics extends Application {
 	public static int width = 800;
@@ -33,15 +36,15 @@ public class Graphics extends Application {
 
 		stage.setTitle("Particle Effect Engine");
 		stage.setScene(scene);
-		//stage.initStyle(StageStyle.TRANSPARENT);
+//		stage.initStyle(StageStyle.TRANSPARENT);
 		stage.show();
 
-		stage.widthProperty().addListener((obs, oldVal, newVal) -> {
-			width = newVal.intValue();
-		});
-		stage.heightProperty().addListener((obs, oldVal, newVal) -> {
-			height = newVal.intValue();
-		});
+//		stage.widthProperty().addListener((obs, oldVal, newVal) -> {
+//			width = newVal.intValue();
+//		});
+//		stage.heightProperty().addListener((obs, oldVal, newVal) -> {
+//			height = newVal.intValue();
+//		});
 
 
 		tracker = PerformanceTracker.getSceneTracker(scene);
@@ -59,7 +62,6 @@ public class Graphics extends Application {
 							 particles) {
 							if(particle.isColliding(particle2)) particle.collide(particle2);
 						}
-						//particle.gravity();
 						//System.out.println(particle.direction.y);
 						//System.out.println(particle.getCenterX() + ", " + particle.getCenterY());
 					}
