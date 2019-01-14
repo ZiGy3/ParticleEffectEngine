@@ -4,7 +4,6 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import java.util.ArrayList;
 
@@ -13,24 +12,24 @@ import java.util.ArrayList;
 // - DONE fix frame rate going over 60 on ubuntu
 // - DONE (MAYBE) add collisions
 // - DONE add gravity
-// - add emitter (also add "time to live" to particle, move spawinng of particles to emitter, maybe keep random spawning
+// - add emitter (also add "time to live" to particle, move spawning of particles to emitter, maybe keep random spawning
 //   of particles as a feature, add different types of emitters (maybe each in its own class), figure out who will spawn
 //   emitters etc etc. Basically a lot of work to be done on emitters
 
 public class Graphics extends Application {
 	public static int width = 800;
 	public static int height = 600;
-	public static int NParticles = 1000;
+	public static int NParticles = 100;
 	public static ArrayList<Particle> particles = new ArrayList<>();
 	private static PerformanceTracker tracker;
 
 	@Override
 	public void start(Stage stage) {
 		Pane root = new Pane();
-		for (Particle particle:
-			 particles) {
-			root.getChildren().add(particle);
-		}
+//		for (Particle particle:
+//			 particles) {
+//			root.getChildren().add(particle);
+//		}
 
 		Scene scene = new Scene(root, width, height);
 
@@ -38,6 +37,14 @@ public class Graphics extends Application {
 		stage.setScene(scene);
 //		stage.initStyle(StageStyle.TRANSPARENT);
 		stage.show();
+
+		root.setOnMouseClicked(event -> {
+			root.getChildren().add(new BurstEmitter((int) event.getX(), (int) event.getY()));
+			for (Particle particle:
+					particles) {
+				root.getChildren().add(particle);
+			}
+		});
 
 //		stage.widthProperty().addListener((obs, oldVal, newVal) -> {
 //			width = newVal.intValue();
@@ -75,9 +82,9 @@ public class Graphics extends Application {
 	}
 
 	public static void main(String[] args) {
-		for (int i = 0; i < NParticles; i++) {
-			particles.add(new Particle());
-		}
+//		for (int i = 0; i < NParticles; i++) {
+//			particles.add(new Particle());
+//		}
 		launch(args);
 	}
 
