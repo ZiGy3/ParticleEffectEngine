@@ -1,4 +1,5 @@
 import com.sun.javafx.geom.Vec2d;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
@@ -11,12 +12,13 @@ public class Particle extends Circle {
 	long speed;
 	int size = 4;
 	double subX = 0;
-//	double subY = 0; // REMOVE AFTER APPLYING GRAVITY
 	boolean alwaysMoveX = false;
-//	boolean alwaysMoveY = false; // REMOVE AFTER APPLYING GRAVITY
 //	double gravity = 0.981;
 	double gravity = 0.5;
 	double bounceRatio = 0.75;
+	float ttl = 200;
+	double opacityStep;
+	boolean active = true;
 
 	public Particle() {
 		this.setFill(Color.BLACK);
@@ -25,6 +27,7 @@ public class Particle extends Circle {
 		this.setCenterX(rnd.nextInt(Graphics.width));
 		this.setCenterY(rnd.nextInt(Graphics.height));
 		double d = rnd.nextDouble();
+		this.opacityStep = 1.0 / ttl;
 		this.speed = rnd.nextLong(1, 6);
 		this.direction = new Vec2d(d * speed, (1 - d) * speed);
 		int sign = rnd.nextInt(-1, 2);
@@ -39,10 +42,30 @@ public class Particle extends Circle {
 		if (direction.x >= 1 || direction.x <= -1) {
 			alwaysMoveX = true;
 		}
-//		if (direction.y >= 1 || direction.y <= -1) {// REMOVE AFTER APPLYING GRAVITY
-//			alwaysMoveY = true; // REMOVE AFTER APPLYING GRAVITY
-//		} // REMOVE AFTER APPLYING GRAVITY
-//		UNUSED BECAUSE Y CHANGES WITH GRAVITY AND EVENTUALLY ALL PARTICLES WILL MOVE
+	}
+
+	public Particle(int centerX, int centerY) {
+		this.setFill(Color.BLACK);
+		this.setRadius(size);
+		ThreadLocalRandom rnd = ThreadLocalRandom.current();
+		this.setCenterX(centerX);
+		this.setCenterY(centerY);
+		double d = rnd.nextDouble();
+		this.opacityStep = 1.0 / ttl;
+		this.speed = rnd.nextLong(1, 20);
+		this.direction = new Vec2d(d * speed, (1 - d) * speed);
+		int sign = rnd.nextInt(-1, 2);
+		while (sign == 0) {
+			sign = rnd.nextInt(-1, 2);
+		}
+		direction.x *= sign;
+		do {
+			sign = rnd.nextInt(-1, 2);
+		} while (sign == 0);
+		direction.y *= sign;
+		if (direction.x >= 1 || direction.x <= -1) {
+			alwaysMoveX = true;
+		}
 	}
 
 	public void update() {
@@ -63,20 +86,14 @@ public class Particle extends Circle {
 		} else {
 			this.setCenterX((int) this.getCenterX() + (int) direction.x);
 		}
-//		if (!alwaysMoveY) { // REMOVE AFTER APPLYING GRAVITY
-//			subY += direction.y;
-//			if (subY > 1 || subY < -1) {
-//				if (direction.y > 0) {
-//					this.setCenterY(this.getCenterY() + 1);
-//					subY -= 1;
-//				} else {
-//					this.setCenterY(this.getCenterY() - 1);
-//					subY += 1;
-//				}
-//			}
-//		} else {
-//			this.setCenterY((int) this.getCenterY() + (int) direction.y);
-//		}
+		if (this.getOpacity() > 0) {
+			this.setOpacity(this.getOpacity() - opacityStep);
+			System.out.println(this.getOpacity());
+		} else if (this.getOpacity() == 0) {
+			((Pane) Particle.this.getParent()).getChildren().remove(Particle.this);
+			active = false;
+			System.out.println("hello");
+		}
 	}
 
 
