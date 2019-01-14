@@ -60,17 +60,19 @@ public class Graphics extends Application {
 			private long lastUpdate = 0;
 			@Override
 			public void handle(long now) {
-				if (now - lastUpdate >= 16_000_000) {
+				if (now - lastUpdate >= 0_000_000) {
 					for (Particle particle:
 							particles) {
-						particle.checkBounce();
-						particle.update();
-						for (Particle particle2:
-							 particles) {
-							if(particle.isColliding(particle2)) particle.collide(particle2);
+						if (particle.active) {
+							particle.checkBounce();
+							particle.update();
+							for (Particle particle2:
+									particles) {
+								if(particle.isColliding(particle2)) particle.collide(particle2);
+							}
+							//System.out.println(particle.direction.y);
+							//System.out.println(particle.getCenterX() + ", " + particle.getCenterY());
 						}
-						//System.out.println(particle.direction.y);
-						//System.out.println(particle.getCenterX() + ", " + particle.getCenterY());
 					}
 					lastUpdate = now;
 				}

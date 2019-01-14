@@ -16,7 +16,7 @@ public class Particle extends Circle {
 //	double gravity = 0.981;
 	double gravity = 0.5;
 	double bounceRatio = 0.75;
-	float ttl = 200;
+	float ttl = 50;
 	double opacityStep;
 	boolean active = true;
 
@@ -89,6 +89,9 @@ public class Particle extends Circle {
 		if (this.getOpacity() > 0) {
 			this.setOpacity(this.getOpacity() - opacityStep);
 			System.out.println(this.getOpacity());
+			if (this.getOpacity() < 0) {
+				this.setOpacity(0);
+			}
 		} else if (this.getOpacity() == 0) {
 			((Pane) Particle.this.getParent()).getChildren().remove(Particle.this);
 			active = false;

@@ -28,5 +28,16 @@ public class BurstEmitter extends Circle {
 		for (int i = 0; i < NParticles; i++) {
 
 		}
+		int c = 0;
+		int index = 0;
+		while (c < NParticles) {
+			if (!Graphics.particles.get(index).active) {
+				Graphics.particles.get(index).active = true;
+				// what I'm trying to do is to reuse removed particles. as of now the way I see this would be possible
+				// is to first check if there are enough deleted particles for this emitter. If there aren't, create
+				// them. If yes, move to method in Graphics. There I have to iterate over the entire ArrayList, get
+				// NParticles, set their position to center of emitter, set their active status to true, randomize direction
+			}
+		}
 	}
 }
