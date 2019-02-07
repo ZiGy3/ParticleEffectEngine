@@ -40,10 +40,10 @@ public class Graphics extends Application {
 
 		root.setOnMouseClicked(event -> {
 			root.getChildren().add(new BurstEmitter((int) event.getX(), (int) event.getY()));
-			for (Particle particle:
-					particles) {
-				root.getChildren().add(particle);
-			}
+//			for (Particle particle:
+//					particles) {
+//				root.getChildren().add(particle);
+//			}
 		});
 
 //		stage.widthProperty().addListener((obs, oldVal, newVal) -> {
@@ -60,7 +60,7 @@ public class Graphics extends Application {
 			private long lastUpdate = 0;
 			@Override
 			public void handle(long now) {
-				if (now - lastUpdate >= 0_000_000) {
+				if (now - lastUpdate >= 16_000_000) {
 					for (Particle particle:
 							particles) {
 						if (particle.active) {
