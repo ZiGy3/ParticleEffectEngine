@@ -39,14 +39,16 @@ public class Graphics extends Application {
 		stage.show();
 
 		root.setOnMouseClicked(event -> {
-			root.getChildren().add(new BurstEmitter((int) event.getX(), (int) event.getY()));
+			BurstEmitter b = new BurstEmitter((int) event.getX(), (int) event.getY());
+			root.getChildren().add(b);
+			b.init();
 //			for (Particle particle:
 //					particles) {
 //				root.getChildren().add(particle);
 //			}
 		});
 
-//		stage.widthProperty().addListener((obs, oldVal, newVal) -> {
+//		stage.widthPcheckBounceroperty().addListener((obs, oldVal, newVal) -> {
 //			width = newVal.intValue();
 //		});
 //		stage.heightProperty().addListener((obs, oldVal, newVal) -> {
