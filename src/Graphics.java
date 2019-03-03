@@ -19,17 +19,13 @@ import java.util.ArrayList;
 public class Graphics extends Application {
 	public static int width = 800;
 	public static int height = 600;
-	public static int NParticles = 100;
 	public static ArrayList<Particle> particles = new ArrayList<>();
 	private static PerformanceTracker tracker;
+	private Pane root1 = new Pane();
 
 	@Override
 	public void start(Stage stage) {
-		Pane root = new Pane();
-//		for (Particle particle:
-//			 particles) {
-//			root.getChildren().add(particle);
-//		}
+		Pane root = root1;
 
 		Scene scene = new Scene(root, width, height);
 
@@ -42,13 +38,9 @@ public class Graphics extends Application {
 			BurstEmitter b = new BurstEmitter((int) event.getX(), (int) event.getY());
 			root.getChildren().add(b);
 			b.init();
-//			for (Particle particle:
-//					particles) {
-//				root.getChildren().add(particle);
-//			}
 		});
 
-//		stage.widthPcheckBounceroperty().addListener((obs, oldVal, newVal) -> {
+//		stage.widthProperty().addListener((obs, oldVal, newVal) -> {
 //			width = newVal.intValue();
 //		});
 //		stage.heightProperty().addListener((obs, oldVal, newVal) -> {
@@ -62,7 +54,7 @@ public class Graphics extends Application {
 			private long lastUpdate = 0;
 			@Override
 			public void handle(long now) {
-				if (now - lastUpdate >= 16_000_000) {
+				if (now - lastUpdate >= 0_000_000) {
 					for (Particle particle:
 							particles) {
 						if (particle.active) {
@@ -72,13 +64,11 @@ public class Graphics extends Application {
 									particles) {
 								if(particle.isColliding(particle2)) particle.collide(particle2);
 							}
-							//System.out.println(particle.direction.y);
-							//System.out.println(particle.getCenterX() + ", " + particle.getCenterY());
 						}
 					}
 					lastUpdate = now;
 				}
-				//System.out.println(getFps());
+				//System.out.printlnł(getFps());
 			}
 		};
 
@@ -86,9 +76,6 @@ public class Graphics extends Application {
 	}
 
 	public static void main(String[] args) {
-//		for (int i = 0; i < NParticles; i++) {
-//			particles.add(new Particle());
-//		}
 		launch(args);
 	}
 

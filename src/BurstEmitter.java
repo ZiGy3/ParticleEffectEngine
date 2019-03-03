@@ -14,7 +14,7 @@ import javafx.scene.shape.Circle;
 
 public class BurstEmitter extends Circle {
 	int size = 10;
-	int NParticles = 5;
+	int NParticles = 100;
 	int centerX;
 	int centerY;
 
@@ -26,25 +26,20 @@ public class BurstEmitter extends Circle {
 		this.setRadius(size);
 		this.setFill(Color.ORANGE);
 
-//		for (int i = 0; i < NParticles; i++) {
-//			Graphics.particles.add(new Particle(centerX, centerY));
-//		}
-
-//		for (int i = 0; i < NParticles; i++) {
-//		}
-
 	}
 	public void init() {
 		int c = 0;
 		int index = 0;
 		while (index < NParticles) {
 			if (!Graphics.particles.isEmpty() && !Graphics.particles.get(index).active) {
-				if (c == NParticles) break;System.out.println(getParent());
+				if (c == NParticles) break;
 				c++;
 				Graphics.particles.get(index).setCenterX(centerX);
 				Graphics.particles.get(index).setCenterY(centerY);
 				Graphics.particles.get(index).active = true;
-				((Pane) getParent()).getChildren().add(Graphics.particles.get(index));
+				Graphics.particles.get(index).randomize();
+				Particle p = Graphics.particles.get(index);
+				((Pane) getParent()).getChildren().add(p);
 				// what I'm trying to do is to reuse removed particles. as of now the way I see this would be possible
 				// is to first check if there are enough deleted particles for this emitter. If there aren't, create
 				// them. If yes, move to method in Graphics. There I have to iterate over the entire ArrayList, get
@@ -57,9 +52,6 @@ public class BurstEmitter extends Circle {
 			for (int i = 0; i < NParticles - c; i++) {
 				Particle p = new Particle(centerX,centerY);
 				Graphics.particles.add(p);
-				System.out.println(Graphics.particles.get(Graphics.particles.size() - 1));
-//				((Pane) BurstEmitter.this.getParent()).getChildren().add(Graphics.particles.get(Graphics.particles.size() - 1));
-				System.out.println(getParent());
 				((Pane) getParent()).getChildren().add(p);
 			}
 		}

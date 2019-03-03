@@ -16,18 +16,18 @@ public class Particle extends Circle {
 //	double gravity = 0.981;
 	double gravity = 0.5;
 	double bounceRatio = 0.75;
-	float ttl = 50;
+	float ttl = 150;
 	double opacityStep;
 	boolean active = true;
+	ThreadLocalRandom rnd = ThreadLocalRandom.current();
 
 	public Particle() {
 		this.setFill(Color.BLACK);
 		this.setRadius(size);
-		ThreadLocalRandom rnd = ThreadLocalRandom.current();
 		this.setCenterX(rnd.nextInt(Graphics.width));
 		this.setCenterY(rnd.nextInt(Graphics.height));
-		double d = rnd.nextDouble();
 		this.opacityStep = 1.0 / ttl;
+		double d = rnd.nextDouble();
 		this.speed = rnd.nextLong(1, 6);
 		this.direction = new Vec2d(d * speed, (1 - d) * speed);
 		int sign = rnd.nextInt(-1, 2);
@@ -47,7 +47,6 @@ public class Particle extends Circle {
 	public Particle(int centerX, int centerY) {
 		this.setFill(Color.BLACK);
 		this.setRadius(size);
-		ThreadLocalRandom rnd = ThreadLocalRandom.current();
 		this.setCenterX(centerX);
 		this.setCenterY(centerY);
 		double d = rnd.nextDouble();
@@ -88,14 +87,12 @@ public class Particle extends Circle {
 		}
 		if (this.getOpacity() > 0) {
 			this.setOpacity(this.getOpacity() - opacityStep);
-			System.out.println(this.getOpacity());
 			if (this.getOpacity() < 0) {
 				this.setOpacity(0);
 			}
 		} else if (this.getOpacity() == 0) {
 			((Pane) Particle.this.getParent()).getChildren().remove(Particle.this);
 			active = false;
-			System.out.println("hello");
 		}
 	}
 
@@ -151,5 +148,24 @@ public class Particle extends Circle {
 
 		this.direction.set(v1 * unitContactX + u1PerpX, v1 * unitContactY + u1PerpY);
 		particle.direction.set(v2 * unitContactX + u2PerpX, v2 * unitContactY + u2PerpY);
+	}
+
+	void randomize() {
+		this.setOpacity(1);
+		double d = rnd.nextDouble();
+		this.speed = rnd.nextLong(1, 20);
+		this.direction = new Vec2d(d * speed, (1 - d) * speed);
+		int sign = rnd.nextInt(-1, 2);
+		while (sign == 0) {
+			sign = rnd.nextInt(-1, 2);
+		}
+		direction.x *= sign;
+		do {
+			sign = rnd.nextInt(-1, 2);
+		} while (sign == 0);
+		direction.y *= sign;
+		if (direction.x >= 1 || direction.x <= -1) {
+			alwaysMoveX = true;
+		}
 	}
 }
