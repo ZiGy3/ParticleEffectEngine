@@ -14,23 +14,23 @@ import javafx.scene.shape.Circle;
 
 public class BurstEmitter extends Circle {
 	int size = 10;
-	int NParticles = 100;
+	int NParticles = Graphics.NParticles;
 	int centerX;
 	int centerY;
 
 	public BurstEmitter(int centerX, int centerY) {
-		this.setCenterX(centerX);
-		this.setCenterY(centerY);
 		this.centerX = centerX;
 		this.centerY = centerY;
+		this.setCenterX(centerX);
+		this.setCenterY(centerY);
 		this.setRadius(size);
-		this.setFill(Color.ORANGE);
+		this.setFill(Color.rgb(255, 65, 54));
 
 	}
 	public void init() {
 		int c = 0;
 		int index = 0;
-		while (index < NParticles) {
+		while (index < Graphics.particles.size()) {
 			if (!Graphics.particles.isEmpty() && !Graphics.particles.get(index).active) {
 				if (c == NParticles) break;
 				c++;
@@ -40,10 +40,6 @@ public class BurstEmitter extends Circle {
 				Graphics.particles.get(index).randomize();
 				Particle p = Graphics.particles.get(index);
 				((Pane) getParent()).getChildren().add(p);
-				// what I'm trying to do is to reuse removed particles. as of now the way I see this would be possible
-				// is to first check if there are enough deleted particles for this emitter. If there aren't, create
-				// them. If yes, move to method in Graphics. There I have to iterate over the entire ArrayList, get
-				// NParticles, set their position to center of emitter, set their active status to true, randomize direction
 			}
 			index++;
 		}

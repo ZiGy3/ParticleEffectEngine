@@ -16,7 +16,7 @@ public class Particle extends Circle {
 //	double gravity = 0.981;
 	double gravity = 0.5;
 	double bounceRatio = 0.75;
-	float ttl = 150;
+	float ttl = Graphics.ttl;
 	double opacityStep;
 	boolean active = true;
 	ThreadLocalRandom rnd = ThreadLocalRandom.current();
@@ -91,7 +91,7 @@ public class Particle extends Circle {
 				this.setOpacity(0);
 			}
 		} else if (this.getOpacity() == 0) {
-			((Pane) Particle.this.getParent()).getChildren().remove(Particle.this);
+			((Pane) getParent()).getChildren().remove(Particle.this);
 			active = false;
 		}
 	}
@@ -167,5 +167,6 @@ public class Particle extends Circle {
 		if (direction.x >= 1 || direction.x <= -1) {
 			alwaysMoveX = true;
 		}
+		opacityStep = 1.0 / Graphics.ttl;
 	}
 }
