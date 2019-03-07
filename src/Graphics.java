@@ -88,15 +88,19 @@ public class Graphics extends Application {
 				BurstEmitter b = new BurstEmitter((int) event.getX(), (int) event.getY());
 				root.getChildren().add(b);
 				b.init();
-			} else if (emitterType.getValue() == "Over Time emitter") {
-				OverTimeEmitter e = new OverTimeEmitter((int) event.getX(), (int) event.getY());
-				root.getChildren().add(e);
-//				e.init();
 			}
 		});
 
 		root.setOnMousePressed(event -> {
-			if (emitterType.getValue() == "Over Time emitter")
+			if (emitterType.getValue() == "Over Time emitter") {
+				double x1 = event.getX();
+				double y1 = event.getY();
+				root.setOnMouseReleased(event1 -> {
+					OverTimeEmitter e = new OverTimeEmitter(x1, y1, event1.getX(), event1.getY());
+					root.getChildren().add(e);
+					e.init();
+				});
+			}
 		});
 
 //		stage.widthProperty().addListener((obs, oldVal, newVal) -> {
@@ -127,7 +131,7 @@ public class Graphics extends Application {
 					}
 					lastUpdate = now;
 				}
-				//System.out.printlnł(getFps());
+				//System.out.println(getFps());
 			}
 		};
 
