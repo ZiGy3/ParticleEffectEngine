@@ -15,6 +15,7 @@ public class Particle extends Circle {
 	boolean alwaysMoveX = false;
 //	double gravity = 0.981;
 	double gravity = 0.5;
+	double drag = 0.02;
 	double bounceRatio = 0.75;
 	float ttl = Graphics.ttl;
 	double opacityStep;
@@ -67,7 +68,21 @@ public class Particle extends Circle {
 		}
 	}
 
+	public Particle(int centerX, int centerY, double directionX, double directionY) {
+		this.setFill(Color.BLACK);
+		this.setRadius(size);
+		this.setCenterX(centerX);
+		this.setCenterY(centerY);
+		this.opacityStep = 1.0 / ttl;
+		this.speed = rnd.nextLong(5, 20);
+		this.direction = new Vec2d(directionX * speed, directionY * speed);
+		if (direction.x >= 1 || direction.x <= -1) {
+			alwaysMoveX = true;
+		}
+	}
+
 	public void update() {
+		System.out.println(direction);
 		this.direction.y += gravity; //GRAVITY
 		this.setCenterY((int) this.getCenterY() + (int) direction.y);
 
@@ -93,6 +108,11 @@ public class Particle extends Circle {
 		} else if (this.getOpacity() == 0) {
 			((Pane) getParent()).getChildren().remove(Particle.this);
 			active = false;
+		}
+		if (direction.x < 0) {
+			direction.x += drag;
+		} else if (direction.x > 0) {
+			direction.x -= drag;
 		}
 	}
 

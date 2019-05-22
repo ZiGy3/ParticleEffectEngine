@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
+import static oracle.jrockit.jfr.events.Bits.doubleValue;
 import static oracle.jrockit.jfr.events.Bits.intValue;
 
 //FIXME to-do list
@@ -27,6 +28,7 @@ public class Graphics extends Application {
 	public static ArrayList<Particle> particles = new ArrayList<>();
 	public static int NParticles = 100;
 	public static int ttl = 150;
+	public static double delta = 0.1;
 	private static PerformanceTracker tracker;
 	private Pane root1 = new Pane();
 
@@ -65,8 +67,19 @@ public class Graphics extends Application {
 		ttlSliderStateLabel.setLayoutY(60);
 		ttlSliderStateLabel.setLayoutX(220);
 
+		final Label deltaLabel = new Label("Delta:");
+		deltaLabel.setLayoutY(92);
+
+		final Slider deltaSlider = new Slider(0.01, 1, 0.1);
+		deltaSlider.setLayoutY(92);
+		deltaSlider.setLayoutX(80);
+
+		final Label deltaSliderStateLabel = new Label(Double.toString(deltaSlider.getValue()));
+		deltaSliderStateLabel.setLayoutY(92);
+		deltaSliderStateLabel.setLayoutX(220);
+
 		root.getChildren().addAll(emitterType, particleNumberLabel, particleSlider, ParticleNumberStateLabel,
-				ttlLabel, ttlSlider, ttlSliderStateLabel);
+				ttlLabel, ttlSlider, ttlSliderStateLabel, deltaLabel, deltaSlider, deltaSliderStateLabel);
 
 		stage.setTitle("Particle Effect Engine");
 		stage.setScene(scene);
@@ -81,6 +94,11 @@ public class Graphics extends Application {
 		ttlSlider.valueProperty().addListener((ov, old_val, new_val) -> {
 			ttl = intValue(new_val);
 			ttlSliderStateLabel.setText(Integer.toString(ttl));
+		});
+
+		deltaSlider.valueProperty().addListener((ov, old_val, new_val) -> {
+			delta = new_val.doubleValue();
+			deltaSliderStateLabel.setText(Double.toString(delta));
 		});
 
 		root.setOnMouseClicked(event -> {
